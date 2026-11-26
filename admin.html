@@ -97,10 +97,10 @@ window.setBookingStatus=async(id,status)=>{
  if(status==='completed'){
   const raw=prompt('Valor total deste trabalho em R$ (deixe vazio para lançar depois):','');
   if(raw!==null&&raw.trim()!==''){
-   const normalized=raw.trim().includes(',')?raw.trim().replace(/\\./g,'').replace(',','.'):raw.trim();
+   const normalized=raw.trim().includes(',')?raw.trim().replace(/\./g,'').replace(',','.'):raw.trim();
    amount=Number(normalized);
    if(!Number.isFinite(amount)||amount<=0){toast('Valor inválido. O trabalho não foi concluído.');return}
-   paid=confirm('Este valor já foi recebido?\\n\\nOK = recebido; Cancelar = deixar pendente no financeiro.');
+   paid=confirm('Este valor já foi recebido?\n\nOK = recebido; Cancelar = deixar pendente no financeiro.');
   }
   if(!confirm('Deseja realmente concluir este agendamento?'))return;
   const {data,error}=await db.rpc('admin_complete_booking',{p_booking_id:id,p_amount:amount,p_paid:paid});
