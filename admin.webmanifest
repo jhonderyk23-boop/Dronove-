@@ -1,0 +1,21 @@
+{
+  "id": "./admin.html",
+  "name": "Studio Dronov — Administração",
+  "short_name": "Dronov Admin",
+  "description": "Painel administrativo do Studio Dronov.",
+  "lang": "pt-BR",
+  "start_url": "./admin.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#090a0b",
+  "theme_color": "#090a0b",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
