@@ -38,3 +38,14 @@ Se uma senha de banco, chave secreta ou token privado foi compartilhado em conve
 - Conferir o caixa após excluir um trabalho concluído.
 - Testar filtros, exportação CSV, notificações em tempo real e silêncio do som.
 - Testar em Android, iPhone, tablet e desktop.
+
+## Resultado da verificação do Supabase (26/11/2026)
+- As 7 tabelas encontradas no schema public estão com RLS ativado.
+- As permissões anon de leitura direta estão limitadas às tabelas availability, portfolio e studio_settings; bookings, financial_transactions, studio_notifications e portfolio_metrics não têm concessão de leitura direta para anon.
+- A função is_studio_admin() consulta app_metadata.studio_role, e não user_metadata, o que evita usar metadados editáveis pelo próprio usuário para autorização.
+- O bucket booking-references está privado e limitado a 5 MB; o bucket portfolio é público e limitado a 8 MB.
+- As funções públicas create_public_booking, public_busy_slots, public_featured_tattoos e record_portfolio_open usam SECURITY DEFINER com search_path fixado. O advisor as sinaliza porque são executáveis por anon; são endpoints públicos intencionais e precisam continuar com validação estrita e retorno sem dados pessoais.
+- O advisor também informa que a proteção contra senhas vazadas está desativada. Ative essa opção em Authentication > Settings > Password Security no painel do Supabase.
+- As migrations existem no histórico do projeto Supabase, mas seus arquivos SQL não estão versionados neste repositório. Exporte e mantenha as migrations no Git antes de futuras alterações de banco.
+
+A verificação de segurança é uma fotografia do estado atual, não substitui testes de autorização com contas reais nem revisão contínua das RPCs.
