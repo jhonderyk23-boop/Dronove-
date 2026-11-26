@@ -1,0 +1,21 @@
+{
+  "id": "./index.html",
+  "name": "Studio Dronov",
+  "short_name": "Dronov",
+  "description": "Portfólio e agendamentos do Studio Dronov.",
+  "lang": "pt-BR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#090a0b",
+  "theme_color": "#090a0b",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
