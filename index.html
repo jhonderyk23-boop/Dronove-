@@ -133,8 +133,19 @@ body::after {
   body::after { animation: none; opacity: .55; }
 }
 
+
+/* Painel administrativo incorporado ao site, isolado em iframe para preservar CSS e JavaScript. */
+#adminEmbed{position:fixed;inset:0;z-index:1000;background:#090a0b;display:flex;flex-direction:column}
+#adminEmbed[hidden]{display:none!important}
+#adminEmbed .admin-embed-bar{height:54px;flex:0 0 54px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#111315;border-bottom:1px solid #c8a96b;color:#f4f2ed;font:600 13px 'DM Sans',Arial,sans-serif}
+#adminEmbed .admin-embed-close{border:1px solid #c8a96b;background:transparent;color:#e2cfaa;border-radius:999px;padding:8px 14px;cursor:pointer;font:600 11px 'DM Sans',Arial,sans-serif}
+#adminEmbed iframe{display:block;width:100%;height:calc(100% - 54px);border:0;background:#090a0b}
+nav .nav-admin{font-size:11px;color:#c8a96b;border:1px solid rgba(200,169,107,.45);padding:9px 12px;border-radius:999px;white-space:nowrap}
+nav .nav-admin:hover{background:rgba(200,169,107,.1)}
+@media(max-width:640px){nav .nav-admin{padding:8px 9px;font-size:10px}}
+
 </style></head><body>
-<header class="wrap topbar"><a class="brand" href="#inicio">STUDIO <span>DRONOV</span></a><nav><a href="#trabalhos">Trabalhos</a><a href="#sobre">Sobre</a><a href="#agendar" class="nav-book">Agendar</a><a class="nav-extra" id="instagramLink" href="#" target="_blank" rel="noopener">Instagram ↗</a></nav></header>
+<header class="wrap topbar"><a class="brand" href="#inicio">STUDIO <span>DRONOV</span></a><nav><a href="#trabalhos">Trabalhos</a><a href="#sobre">Sobre</a><a href="#agendar" class="nav-book">Agendar</a><a class="nav-admin" id="openAdminPanel" href="#area-administrativa">Área admin</a><a class="nav-extra" id="instagramLink" href="#" target="_blank" rel="noopener">Instagram ↗</a></nav></header>
 <main>
 
 <div class="wrap"><section class="hero" id="inicio" style="border:0"><div><div class="eyebrow">Studio de tatuagem e piercing · Cassilândia / MS</div><h1>Arte com identidade.<br><em>Feita para marcar.</em></h1><p id="heroBio">Tatuagens, piercing e criações autorais com atenção aos detalhes. Explore o portfólio e agende seu atendimento.</p><div class="actions"><a class="btn" href="#agendar">AGENDAR SESSÃO ↗</a><a class="btn outline" href="#trabalhos">VER PORTFÓLIO</a><a class="btn outline" href="#piercings">VER PIERCINGS ↓</a></div><div class="stats"><div class="stat"><strong id="yearsStat">MS</strong><span>CASSILÂNDIA</span></div><div class="stat"><strong id="worksStat">0</strong><span>TRABALHOS</span></div><div class="stat"><strong>01</strong><span>ESTÚDIO</span></div></div></div><div class="hero-portrait"><img src="studio-dronov-perfil.jpg" alt="Identidade visual do Studio Dronov"><div class="hero-caption">TATUAGEM · PIERCING · ARTE</div></div></section></div>
@@ -197,6 +208,11 @@ body::after {
 
 <section><div class="wrap" style="text-align:center"><div class="eyebrow">Vamos conversar</div><h2 style="font:600 38px 'Playfair Display'">Tem uma ideia em mente?</h2><p style="color:var(--muted);margin:0 auto 22px;max-width:540px">Entre em contato para tirar dúvidas sobre projetos, estilos e disponibilidade.</p><a class="btn outline" id="whatsappCta" href="#" target="_blank" rel="noopener">CONVERSAR PELO WHATSAPP ↗</a></div></section></main>
 <div class="portfolio-lightbox" id="portfolioLightbox" role="dialog" aria-modal="true" aria-label="Visualização do trabalho" aria-hidden="true"><button class="lb-nav lb-prev" id="lbPrev" type="button" aria-label="Foto anterior">‹</button><button class="lb-nav lb-next" id="lbNext" type="button" aria-label="Próxima foto">›</button><div class="lightbox-card"><button class="lightbox-close" id="lightboxClose" type="button" aria-label="Fechar">×</button><span class="lb-count" id="lbCount"></span><img id="lightboxImage" src="" alt=""><div class="lightbox-title" id="lightboxTitle"></div></div></div><footer class="footer"><div class="wrap footer-inner"><span>© <span id="year"></span> Studio Dronov · Todos os direitos reservados.</span><span id="addressFooter">Cassilândia · MS</span><span class="footer-credit">Desenvolvido por <strong>JHON</strong></span><a class="social" id="footerInstagram" href="#" target="_blank" rel="noopener">INSTAGRAM ↗</a></div></footer><div id="toast"></div>
+<div id="adminEmbed" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Painel administrativo">
+  <div class="admin-embed-bar"><strong>STUDIO DRONOV · ADMINISTRAÇÃO</strong><button type="button" class="admin-embed-close" id="closeAdminPanel">FECHAR ✕</button></div>
+  <iframe id="adminFrame" title="Painel administrativo do Studio Dronov" loading="lazy"></iframe>
+</div>
+
 <script>
 const SUPABASE_URL='https://cwapkclsjojprorafjud.supabase.co';const SUPABASE_ANON_KEY='sb_publishable_s9AqRAviPcZHqssSB-JAhw_hV2htu0w';let db=null,settings={},availability=[],selectedSlot='',publicMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1),publicAvailability=[];const $=s=>document.querySelector(s);const ready=()=>SUPABASE_URL.startsWith('https://')&&!SUPABASE_ANON_KEY.startsWith('COLE_');function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',3500)}function waLink(phone,msg){const n=(phone||'').replace(/\D/g,'');return n?'https://wa.me/'+n+'?text='+encodeURIComponent(msg):'#'}function setLinks(){const studioPhone=settings.whatsapp||'556781801717';const w=waLink(studioPhone,'Olá! Gostaria de saber mais sobre uma tatuagem.');$('#whatsappCta').href=w;$('#instagramLink').href=settings.instagram||'#';$('#footerInstagram').href=settings.instagram||'#';$('#addressFooter').textContent=settings.address||'Rua Ricardo Dutra de Oliveira, 555 · Cassilândia/MS · 79540-000'}function applySettings(){const deposit=$('#depositNotice');if(settings.deposit_enabled){deposit.hidden=false;deposit.textContent=`Para confirmar o agendamento, o estúdio solicita um sinal de ${settings.deposit_percentage||30}% do valor combinado. O tatuador enviará as instruções e confirmará após verificar o recebimento.`}else{deposit.hidden=true}document.title=(settings.artist_name||'Studio Dronov')+' — Tatuagem & Arte Autoral';$('#artistName').textContent=settings.artist_name||'Studio Dronov';$('#heroBio').textContent=settings.short_bio||'Tatuagens, piercing e criações autorais com atenção aos detalhes. Explore o portfólio e agende seu atendimento.';$('#aboutBio').textContent=settings.bio||settings.short_bio||'O Studio Dronov é um espaço de tatuagem e piercing em Cassilândia/MS, com projetos tratados com cuidado, técnica e atenção aos detalhes.';$('#yearsStat').textContent='MS';$('#specialties').innerHTML=(settings.specialties||'Tatuagem,Piercing,Arte autoral').split(',').map(x=>`<span>${esc(x.trim())}</span>`).join('');setLinks()}function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}async function loadPortfolio(){const {data,error}=await db.from('portfolio').select('*').eq('is_published',true).order('sort_order').order('created_at',{ascending:false});if(error)throw error;const items=data||[];renderGallery(items,'all');$('#filters').onclick=e=>{const b=e.target.closest('button[data-filter]');if(!b)return;document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderGallery(items,b.dataset.filter)};$('#worksStat').textContent=items.length}async function loadFeaturedTattoos(){const section=$('#destaques');try{const {data,error}=await db.rpc('public_featured_tattoos',{p_limit:10});if(error)throw error;renderFeaturedTattoos(data||[])}catch(error){console.warn('Ranking do carrossel indisponível; usando trabalhos publicados.',error.message);const {data,error:fallbackError}=await db.from('portfolio').select('id,title,category,image_url').eq('is_published',true).eq('content_type','tattoo').order('created_at',{ascending:false}).limit(10);if(fallbackError){section.hidden=true;return}renderFeaturedTattoos(data||[])}}
 async function loadPublicDates(){const root=$('#publicDates');const today=dateLocal(new Date());const end=new Date();end.setMonth(end.getMonth()+7);const until=dateLocal(end);try{const {data,error}=await db.from('availability').select('*').gte('available_date',today).lte('available_date',until).order('available_date',{ascending:true}).limit(240);if(error)throw error;publicAvailability=data||[];busyCache.clear();await renderPublicCalendar()}catch(error){publicAvailability=[];await renderPublicCalendar();$('#calendarInstruction').textContent='Os dias estão visíveis, mas a disponibilidade não pôde ser consultada. O administrador precisa revisar a conexão e os dias publicados.';console.error('Falha ao carregar disponibilidade do calendário:',error)}}
@@ -293,4 +309,30 @@ async function init(){
  await Promise.all(jobs.map(async ([name,fn])=>{try{await fn()}catch(error){console.error('Falha ao carregar '+name+':',error);if(name==='calendário'){publicAvailability=[];await renderPublicCalendar();$('#calendarInstruction').textContent='Os dias aparecem, mas não foi possível consultar a disponibilidade. Verifique o Supabase.'}else if(name==='portfólio')$('#gallery').innerHTML='<div class="empty">Não foi possível carregar os trabalhos agora.</div>'}}));
 }
 init();
-</script><script src="pwa.js" defer></script></body></html>
+</script><script>
+(function(){
+  const openButton=document.getElementById('openAdminPanel');
+  const closeButton=document.getElementById('closeAdminPanel');
+  const panel=document.getElementById('adminEmbed');
+  const frame=document.getElementById('adminFrame');
+  if(!openButton||!closeButton||!panel||!frame)return;
+  function openPanel(event){
+    if(event)event.preventDefault();
+    if(!frame.getAttribute('src'))frame.setAttribute('src','admin.html');
+    panel.hidden=false;
+    panel.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+    closeButton.focus();
+  }
+  function closePanel(){
+    panel.hidden=true;
+    panel.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+    openButton.focus();
+  }
+  openButton.addEventListener('click',openPanel);
+  closeButton.addEventListener('click',closePanel);
+  document.addEventListener('keydown',function(event){if(event.key==='Escape'&&!panel.hidden)closePanel()});
+})();
+</script>
+<script src="pwa.js" defer></script></body></html>
